@@ -24,7 +24,6 @@ def to_pdf(html: str) -> bytes:
         )
     except Exception as e:
         logger.error(e)
-        print(e)
         return b""
 
     try:
@@ -32,7 +31,6 @@ def to_pdf(html: str) -> bytes:
         pdf = driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
     except Exception as e:
         logger.error(e)
-        print(e)
         return b""
     finally:
         driver.close()
