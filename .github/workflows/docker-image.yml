@@ -1,0 +1,37 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get timestamp
+        id: timestamp
+        run: echo "::set-output name=date::$(date +"%Y%m%d-%H%M")"
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: echo $BUILD_VERSION
+      - name: Build & docker image
+        env:
+          BUILD_VERSION: ${{ steps.timestamp.outputs.date }}
+        run: |
+          docker build --progress=plain -t ghcr.io/wm3ndez/simple-html-to-pdf:$BUILD_VERSION -f Dockerfile .  --build-arg VERSION=$BUILD_VERSION
+          docker tag ghcr.io/wm3ndez/simple-html-to-pdf:$BUILD_VERSION ghcr.io/wm3ndez/simple-html-to-pdf:latest
+          docker push ghcr.io/wm3ndez/simple-html-to-pdf:$BUILD_VERSION
+          docker push ghcr.io/wm3ndez/simple-html-to-pdf:latest
