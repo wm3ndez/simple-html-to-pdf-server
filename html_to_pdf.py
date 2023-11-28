@@ -33,7 +33,7 @@ def to_pdf(html: str) -> bytes:
         logger.error(e)
         return b""
     finally:
-        driver.close()
+        driver.quit()
 
     return base64.b64decode(pdf["data"])
 
