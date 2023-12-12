@@ -17,25 +17,26 @@ def to_pdf(html: str) -> bytes:
     html_b64 = _encode_html(html)
     chrome_options = build_chrome_options()
     executable_path = os.environ.get("CHROMEDRIVER_PATH") or "/usr/bin/chromedriver"
-
+    output = b""
+    
+    driver = None
     try:
-        driver = webdriver.Chrome(
-            executable_path=executable_path, chrome_options=chrome_options
-        )
+        driver = webdriver.Chrome(executable_path=executable_path, chrome_options=chrome_options)
     except Exception as e:
         logger.error(e)
-        return b""
 
-    try:
-        driver.get(f"data:text/html;base64,{html_b64}")
-        pdf = driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
-    except Exception as e:
-        logger.error(e)
-        return b""
-    finally:
-        driver.quit()
+    if driver:
+        try:
+            driver.get(f"data:text/html;base64,{html_b64}")
+            pdf = driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
+        except Exception as e:
+            logger.error(e)
+        else:
+            output = base64.b64decode(pdf["data"])
+        finally:
+            driver.quit()
 
-    return base64.b64decode(pdf["data"])
+    return output
 
 
 def build_chrome_options():
