@@ -45,7 +45,7 @@ RUN apt install unzip \
 RUN wget https://storage.googleapis.com/chrome-for-testing-public/126.0.6478.61/linux64/chromedriver-linux64.zip \
     && unzip chromedriver-linux64.zip \
     && rm chromedriver-linux64.zip \
-    && mv chromedriver /usr/bin/chromedriver
+    && mv chromedriver-linux64/chromedriver /usr/bin/chromedriver
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
