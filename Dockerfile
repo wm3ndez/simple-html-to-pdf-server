@@ -33,7 +33,7 @@ RUN apt-get install -y \
 	--no-install-recommends
 
 RUN wget --no-verbose -O /tmp/chrome.deb \
-    https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_114.0.5735.198-1_amd64.deb \
+    https://dl.google.com/linux/deb/pool/main/g/google-chrome-stable/google-chrome-stable_126.0.6478.61-1_amd64.deb \
     && apt install -y /tmp/chrome.deb \
     && rm /tmp/chrome.deb
 
@@ -42,9 +42,9 @@ RUN apt install unzip \
     && apt clean  \
     && rm -rf /var/lib/apt
 
-RUN wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip \
-    && unzip chromedriver_linux64.zip \
-    && rm chromedriver_linux64.zip \
+RUN wget https://storage.googleapis.com/chrome-for-testing-public/126.0.6478.61/linux64/chromedriver-linux64.zip \
+    && unzip chromedriver-linux64.zip \
+    && rm chromedriver-linux64.zip \
     && mv chromedriver /usr/bin/chromedriver
 
 COPY requirements.txt .
