@@ -18,10 +18,12 @@ def to_pdf(html: str) -> bytes:
     chrome_options = build_chrome_options()
     executable_path = os.environ.get("CHROMEDRIVER_PATH") or "/usr/bin/chromedriver"
     output = b""
-    
+
     driver = None
     try:
-        driver = webdriver.Chrome(executable_path=executable_path, chrome_options=chrome_options)
+        driver = webdriver.Chrome(
+            executable_path=executable_path, chrome_options=chrome_options
+        )
     except Exception as e:
         logger.error(e)
 
@@ -42,16 +44,8 @@ def to_pdf(html: str) -> bytes:
 def build_chrome_options():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-zygote")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--single-process")
-    chrome_options.add_argument("--disable-extensions")
-    chrome_options.add_argument("--disable-dev-profile")
-    chrome_options.add_argument("--disable-web-security")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu-rasterization")
-    chrome_options.add_argument("--disable-software-rasterizer")
 
     chrome_options.binary_location = (
         os.environ.get("CHROME_BINARY") or "/opt/google/chrome/chrome"
